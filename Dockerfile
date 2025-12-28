@@ -7,9 +7,9 @@ RUN npm install
 
 COPY . .
 
-ARG FIRECRAWL_API_KEY
-ENV FIRECRAWL_API_KEY=$FIRECRAWL_API_KEY
-
-RUN npm run build
+RUN --mount=type=secret,id=app_env \
+    cp /run/secrets/app_env .env && \
+    npm run build && \
+    rm .env
 
 CMD ["npm", "start"]
