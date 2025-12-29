@@ -13,11 +13,10 @@ COPY . .
 
 # Use the secret ONLY for the build process
 # The secret is NOT saved in the final image layers
-ARG  SECRET_PATH
-
-COPY SECRET_PATH .env
-
-COPY .env .
+RUN --mount=type=secret,id=app_config \
+    # Automatically export all variables from the secret file to the environment
+    set -a && . /run/secrets/app_config && set +a && \
+    npm run build
 # If the app NEEDS that config at runtime, do NOT use RUN --mount.
 # Instead, mount it when starting the container (docker run -v ...)
 
