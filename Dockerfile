@@ -14,7 +14,7 @@ COPY . .
 # Use the secret ONLY for the build process
 # The secret is NOT saved in the final image layers
 RUN --mount=type=secret,id=app_config \
-    set -a && . /run/secrets/app_config && set +a && \
+    cat /run/secrets/app_config > ./config_internal.json && \
     npm run build
 # If the app NEEDS that config at runtime, do NOT use RUN --mount.
 # Instead, mount it when starting the container (docker run -v ...)
