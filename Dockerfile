@@ -6,8 +6,9 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
-COPY $ENV .
 
-RUN npm run build
+RUN --mount=type=secret,id=app_config \
+    cat /run/secrets/app_config > ./config_internal.json && \
+    npm run build
 
 CMD ["npm", "start"]
