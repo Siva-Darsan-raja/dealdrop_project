@@ -12,7 +12,6 @@ RUN npm install
 COPY . .
 
 
-#changed
 RUN --mount=type=secret,id=app_config \
     export $(grep -v '^#' /run/secrets/app_config | tr -d '\r' | xargs) && \
     npm run build
