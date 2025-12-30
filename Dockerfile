@@ -15,7 +15,6 @@ COPY . .
 # The secret is NOT saved in the final image layers
 
 RUN --mount=type=secret,id=app_config \
-    # Automatically export all variables from the secret file to the environment
     npm run build
 
 
