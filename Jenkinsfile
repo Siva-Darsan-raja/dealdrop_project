@@ -10,7 +10,8 @@ pipeline {
     stages {
         stage('GIT CHECKCOUT') {
             steps {
-                git changelog: false, poll: false, url: 'https://github.com/Siva-Darsan-raja/dealdrop_project.git'
+                checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'git-pass', url: 'https://github.com/Siva-Darsan-raja/dealdrop_project.git']])
+
             }
         }
 
