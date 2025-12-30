@@ -8,7 +8,7 @@ pipeline {
 
     }
     stages {
-        stage('GIT CHECKOUT') {
+        stage('git checkout') {
             steps {
                 git changelog: false, poll: false, url: 'https://github.com/Siva-Darsan-raja/dealdrop_project.git'
             }
