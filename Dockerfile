@@ -11,6 +11,7 @@ RUN npm install
 # Copy application source
 COPY . .
 
+#chnanged 
 
 RUN npm run build
 
