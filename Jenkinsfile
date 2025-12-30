@@ -7,6 +7,9 @@ pipeline {
         SECRET_FILE_ID = 'my-secret-file'
 
     }
+     triggers {
+        githubPush()
+    }
     stages {
         stage('GIT CHECKCOUT') {
             steps {
