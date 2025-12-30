@@ -11,7 +11,7 @@ RUN npm install
 # Copy application source
 COPY . .
 
-#changes are happened
+
 RUN npm run build
 
 
