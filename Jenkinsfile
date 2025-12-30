@@ -20,7 +20,7 @@ pipeline {
             }
         }
 
-        stage('Docker Build') {
+        stage('DOCKER BUILD') {
             steps {
                 // Securely bind the secret file to a temporary path variable
                 withCredentials([file(credentialsId: "${SECRET_FILE_ID}", variable: 'SECRET_PATH')]) {
@@ -34,7 +34,7 @@ pipeline {
             }
         }
 
-        stage('Docker Push') {
+        stage('DOCKER PUSH') {
             steps {
                 script {
                     def dockerImage = docker.image("${DOCKER_IMAGE}")
@@ -45,7 +45,7 @@ pipeline {
             }
         }
 
-         stage('trivy vulnerability scan') {
+         stage('TRIVY VULNARABILITY SCAN') {
             steps {
                 sh 'trivy image ${DOCKER_IMAGE}'
             }
