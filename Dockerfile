@@ -16,9 +16,8 @@ COPY . .
 
 RUN --mount=type=secret,id=app_config \
     # Automatically export all variables from the secret file to the environment
-    set -a && . /run/secrets/app_config && set +a 
-
-RUN npm run build
+    set -a && . /run/secrets/app_config && set +a && \
+    npm run build
 
 
 CMD ["npm", "start"]
