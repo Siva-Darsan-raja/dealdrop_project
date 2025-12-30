@@ -8,9 +8,9 @@ pipeline {
 
     }
     stages {
-        stage('git checkout') {
+        stage('GIT CHECKOUT') {
             steps {
-                git changelog: false, poll: false, url: 'https://github.com/Siva-Darsan-raja/dealdrop_project.git'
+               checkout scm
             }
         }
 
