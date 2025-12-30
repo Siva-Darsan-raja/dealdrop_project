@@ -11,9 +11,7 @@ RUN npm install
 # Copy application source
 COPY . .
 
-RUN --mount=type=secret,id=app_config \
-    set -a && . /run/secrets/app_config && set +a && \
-    npm run build
+RUN npm run build
 
 
 CMD ["npm", "start"]
