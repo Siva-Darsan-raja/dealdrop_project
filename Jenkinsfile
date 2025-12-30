@@ -7,14 +7,10 @@ pipeline {
         SECRET_FILE_ID = 'my-secret-file'
 
     }
-     triggers {
-        githubPush()
-    }
-    
     stages {
         stage('GIT CHECKCOUT') {
             steps {
-                 checkout scm
+                git changelog: false, poll: false, url: 'https://github.com/Siva-Darsan-raja/dealdrop_project.git'
             }
         }
 
