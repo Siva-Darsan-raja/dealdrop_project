@@ -27,7 +27,7 @@ pipeline {
                     script {
                         // Use BuildKit by setting DOCKER_BUILDKIT=1
                         // id=app_config must match the id in the Dockerfile
-                        sh 'DOCKER_BUILDKIT=1 docker buildx build --secret id=app_config,src=$SECRET_PATH -t ${DOCKER_IMAGE} --load .'
+                        sh 'docker build --secret id=app_config,src=$SECRET_PATH -t ${DOCKER_IMAGE} --load .'
                         
                     }
                 }
