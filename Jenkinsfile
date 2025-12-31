@@ -46,7 +46,7 @@ pipeline {
 
         stage('TRIVY VULNARABILITY SCAN') {
             steps {
-                sh 'trivy image ${DOCKER_IMAGE}'
+                sh 'trivy image ${DOCKER_IMAGE}:${BUILD_NUMBER}'
             }
         }
 
