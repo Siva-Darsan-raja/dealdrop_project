@@ -64,12 +64,12 @@ pipeline {
                         cd gitops-repo/k8s || exit 1
 
                         echo "Before update:"
-                        grep image deployment.yaml
+                        grep image Deployment.yaml
 
                         sed -i "s#image: ${DOCKER_IMAGE}:.*#image: ${DOCKER_IMAGE}#g" Deployment.yaml
 
                         echo "After update:"
-                        grep image deployment.yaml
+                        grep image Deployment.yaml
 
                         git config user.email "sivadarsan48@gmail.com"
                         git config user.name "Siva Darsan"
