@@ -50,22 +50,34 @@ pipeline {
             }
         }
 
-        stage('Update Deployment File') {
-            environment {
-                GIT_REPO_NAME = 'dd-deploymentrepo'
-                GIT_USER_NAME = 'Siva-Darsan-raja'
-            }
+        stage('Update GitOps Repo') {
             steps {
-                withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
+                withCredentials([usernamePassword(
+                    credentialsId: 'git-pass',
+                    usernameVariable: 'GIT_USERNAME',
+                    passwordVariable: 'GIT_PASSWORD'
+                )]) {
                     sh '''
-                    git config user.email "sivadarsan48@gmail.com"
-                    git config user.name "Siva Darsan"
-                    BUILD_NUMBER=${BUILD_NUMBER}
-                    sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" k8s/deployment.yml
-                    git add k8s/deployment.yml
-                    git commit -m "Update deployment image to version ${BUILD_NUMBER}"
-                    git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
-                '''
+                        rm -rf gitops-repo
+                        git clone https://$GIT_USERNAME:$GIT_PASSWORD@github.com/Siva-Darsan-raja/dd-deploymentrepo.git gitops-repo
+
+                        cd gitops-repo/k8s || exit 1
+
+                        echo "Before update:"
+                        grep image deployment.yaml
+
+                        sed -i "s#image: ${DOCKER_IMAGE}:.*#image: ${DOCKER_IMAGE}#g" deployment.yaml
+
+                        echo "After update:"
+                        grep image deployment.yaml
+
+                        git config user.email "sivadarsan48@gmail.com"
+                        git config user.name "Siva Darsan"
+
+                        git add deployment.yaml
+                        git commit -m "Update the deployment file" || echo "No changes to commit"
+                        git push origin main
+                    '''
                 }
             }
         }
