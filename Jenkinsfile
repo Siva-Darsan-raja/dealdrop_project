@@ -7,12 +7,6 @@ pipeline {
         SECRET_FILE_ID = 'my-secret-file'
 
     }
-    stages {
-        stage('GIT CHECKOUT') {
-            steps {
-               checkout scm
-            }
-        }
 
         stage('SONAR ANALYSIS') {
             steps {
