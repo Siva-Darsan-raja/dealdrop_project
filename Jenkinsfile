@@ -36,7 +36,7 @@ pipeline {
         stage('DOCKER PUSH') {
             steps {
                 script {
-                    def dockerImage = docker.image("${DOCKER_IMAGE}")
+                    def dockerImage = docker.image("${DOCKER_IMAGE}:${BUILD_NUMBER}")
                     withDockerRegistry(credentialsId: 'docker-cred') {
                         dockerImage.push()
                     }
