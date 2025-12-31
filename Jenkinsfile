@@ -66,7 +66,7 @@ pipeline {
                         echo "Before update:"
                         grep image deployment.yaml
 
-                        sed -i "s#image: ${DOCKER_IMAGE}:.*#image: ${DOCKER_IMAGE}#g" deployment.yaml
+                        sed -i "s#image: ${DOCKER_IMAGE}:.*#image: ${DOCKER_IMAGE}#g" Deployment.yaml
 
                         echo "After update:"
                         grep image deployment.yaml
