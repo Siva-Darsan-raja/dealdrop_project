@@ -7,6 +7,7 @@ pipeline {
         SECRET_FILE_ID = 'my-secret-file'
 
     }
+      Stages{
 
         stage('SONAR ANALYSIS') {
             steps {
