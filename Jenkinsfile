@@ -66,7 +66,7 @@ pipeline {
                         echo "Before update:"
                         grep image Deployment.yaml
 
-                        sed -i "s#image: ${DOCKER_IMAGE}:.*#image: ${DOCKER_IMAGE}:${BUILD_NUMBER}#g" k8s/Deployment.yaml
+                        sed -i "s#image: ${DOCKER_IMAGE}:.*#image: ${DOCKER_IMAGE}:${BUILD_NUMBER}#g" Deployment.yaml
 
                         echo "After update:"
                         grep image Deployment.yaml
