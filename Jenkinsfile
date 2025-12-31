@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         SCANNER_HOME = tool 'sonar-scanner'
-        DOCKER_IMAGE = "siva2234/dealdrop:${BUILD_NUMBER}"
+        DOCKER_IMAGE = "siva2234/dealdrop"
         SECRET_FILE_ID = 'my-secret-file'
     }
     stages {
@@ -27,7 +27,7 @@ pipeline {
                         // Use BuildKit by setting DOCKER_BUILDKIT=1
                         // id=app_config must match the id in the Dockerfile
 
-                        sh 'docker build --secret id=app_config,src=$SECRET_PATH -t ${DOCKER_IMAGE} --load .'
+                        sh 'docker build --secret id=app_config,src=$SECRET_PATH -t ${DOCKER_IMAGE}:${BUILD_NUMBER} --load .'
                     }
                 }
             }
@@ -66,7 +66,7 @@ pipeline {
                         echo "Before update:"
                         grep image Deployment.yaml
 
-                        sed -i "s#image: ${DOCKER_IMAGE}:.*#image: ${DOCKER_IMAGE}#g" Deployment.yaml
+                        sed -i "s#image: ${DOCKER_IMAGE}:.*#image: ${DOCKER_IMAGE}:${BUILD_NUMBER}#g" k8s/Deployment.yaml
 
                         echo "After update:"
                         grep image Deployment.yaml
@@ -74,7 +74,7 @@ pipeline {
                         git config user.email "sivadarsan48@gmail.com"
                         git config user.name "Siva Darsan"
 
-                        git add deployment.yaml
+                        git add Deployment.yaml
                         git commit -m "Update the deployment file" || echo "No changes to commit"
                         git push origin main
                     '''
