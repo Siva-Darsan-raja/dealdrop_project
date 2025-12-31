@@ -5,12 +5,11 @@ pipeline {
         SCANNER_HOME = tool 'sonar-scanner'
         DOCKER_IMAGE = "siva2234/dealdrop:${BUILD_NUMBER}"
         SECRET_FILE_ID = 'my-secret-file'
-
     }
-       stages {
+    stages {
         stage('GIT CHECKOUT') {
             steps {
-               checkout scm
+                checkout scm
             }
         }
 
@@ -27,7 +26,7 @@ pipeline {
                     script {
                         // Use BuildKit by setting DOCKER_BUILDKIT=1
                         // id=app_config must match the id in the Dockerfile
-                        
+
                         sh 'docker build --secret id=app_config,src=$SECRET_PATH -t ${DOCKER_IMAGE} --load .'
                     }
                 }
@@ -45,11 +44,30 @@ pipeline {
             }
         }
 
-         stage('TRIVY VULNARABILITY SCAN') {
+        stage('TRIVY VULNARABILITY SCAN') {
             steps {
                 sh 'trivy image ${DOCKER_IMAGE}'
             }
-         }
+        }
 
+        stage('Update Deployment File') {
+            environment {
+                GIT_REPO_NAME = 'dd-deploymentrepo'
+                GIT_USER_NAME = 'Siva-Darsan-raja'
+            }
+            steps {
+                withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
+                    sh '''
+                    git config user.email "sivadarsan48@gmail.com"
+                    git config user.name "Siva Darsan"
+                    BUILD_NUMBER=${BUILD_NUMBER}
+                    sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" k8s/deployment.yml
+                    git add k8s/deployment.yml
+                    git commit -m "Update deployment image to version ${BUILD_NUMBER}"
+                    git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+                '''
+                }
+            }
+        }
     }
 }
