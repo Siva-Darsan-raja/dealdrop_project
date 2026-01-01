@@ -21,16 +21,10 @@ pipeline {
 
         stage('DOCKER BUILD') {
             steps {
-                // Securely bind the secret file to a temporary path variable
-                withCredentials([file(credentialsId: "${SECRET_FILE_ID}", variable: 'SECRET_PATH')]) {
                     script {
-                        // Use BuildKit by setting DOCKER_BUILDKIT=1
-                        // id=app_config must match the id in the Dockerfile
-
-                        sh 'docker build --secret id=app_config,src=$SECRET_PATH -t ${DOCKER_IMAGE}:${BUILD_NUMBER} --load .'
+                        sh 'docker build -t ${DOCKER_IMAGE}:${BUILD_NUMBER} .'
                     }
                 }
-            }
         }
 
         stage('DOCKER PUSH') {
