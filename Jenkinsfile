@@ -3,8 +3,10 @@ pipeline {
 
     environment {
         SCANNER_HOME = tool 'sonar-scanner'
-        DOCKER_IMAGE = "siva2234/dealdrop"
-        SECRET_FILE_ID = 'my-secret-file'
+        IMAGE_NAME = 'dealdrop'
+        ECR_REPO = '313712213829.dkr.ecr.ap-south-1.amazonaws.com/dealdrop-app'
+        AWS_REGION = 'ap-south-1'
+
     }
     stages {
         stage('GIT CHECKOUT') {
@@ -21,28 +23,33 @@ pipeline {
 
         stage('DOCKER BUILD') {
             steps {
-                    script {
-                        sh 'docker build -t ${DOCKER_IMAGE}:${BUILD_NUMBER} .'
-                    }
-                }
-        }
-
-        stage('DOCKER PUSH') {
-            steps {
-                script {
-                    def dockerImage = docker.image("${DOCKER_IMAGE}:${BUILD_NUMBER}")
-                    withDockerRegistry(credentialsId: 'docker-cred') {
-                        dockerImage.push()
-                    }
-                }
+                echo "Using updated Image tag ${IMAGE_NAME}:${BUILD_NUMBER}"
+                sh 'docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} .'
+                sh 'docker tag ${IMAGE_NAME}:${BUILD_NUMBER} ${IMAGE_NAME}:latest'
             }
         }
+
 
         stage('TRIVY VULNARABILITY SCAN') {
             steps {
-                sh 'trivy image ${DOCKER_IMAGE}:${BUILD_NUMBER}'
+                sh 'trivy image ${IMAGE_NAME}:${BUILD_NUMBER} > report.txt'
             }
         }
+
+        stage('Push to ECR') {
+            steps {
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-cred']]) {
+                    sh '''
+                        aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REPO
+                        docker tag $IMAGE_NAME:$BUILD_NUMBER $ECR_REPO:$BUILD_NUMBER
+                        docker push $ECR_REPO:$BUILD_NUMBER
+
+                        docker tag $IMAGE_NAME:$BUILD_NUMBER $ECR_REPO:latest
+                        docker push $ECR_REPO:latest
+                    '''
+                }
+            }
+         }
 
         stage('Update GitOps Repo') {
             steps {
@@ -60,7 +67,7 @@ pipeline {
                         echo "Before update:"
                         grep image Deployment.yaml
 
-                        sed -i "s#image: ${DOCKER_IMAGE}:.*#image: ${DOCKER_IMAGE}:${BUILD_NUMBER}#g" Deployment.yaml
+                        sed -i "s#image: ${ECR_REPO}:.*#image: ${ECR_REPO}:${BUILD_NUMBER}}#g" Deployment.yaml
 
                         echo "After update:"
                         grep image Deployment.yaml
@@ -75,5 +82,5 @@ pipeline {
                 }
             }
         }
-    }
+}
 }
