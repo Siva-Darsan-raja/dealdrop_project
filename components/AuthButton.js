@@ -8,6 +8,7 @@ import { LogIn, LogOut } from "lucide-react";
 
 export default function AuthButton({ user }) {
   const [showAuthModal, setShowAuthModal] = useState(false);
+
   if (user) {
     return (
       <form action={signOut}>
@@ -18,6 +19,7 @@ export default function AuthButton({ user }) {
       </form>
     );
   }
+
   return (
     <>
       <Button
