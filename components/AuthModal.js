@@ -14,7 +14,7 @@ export default function AuthModal({ isOpen, onClose }) {
   const supabase = createClient();
 
   const handleGoogleLogin = async () => {
-    const { origin } = window.location;
+    const { origin } = http://a58b5f56bd8a64c4f868ffdd1196bf62-1464225109.ap-south-1.elb.amazonaws.com:80;
 
     await supabase.auth.signInWithOAuth({
       provider: "google",
