@@ -14,13 +14,15 @@ export default function AuthModal({ isOpen, onClose }) {
   const supabase = createClient();
 
   const handleGoogleLogin = async () => {
-  await supabase.auth.signInWithOAuth({
-    provider: "google",
-    options: {
-      redirectTo: window.location.origin
-    },
-  });
-};
+    const { origin } = windows.location;
+
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${origin}/auth/callback`,
+      },
+    });
+  };
 
 
   return (
