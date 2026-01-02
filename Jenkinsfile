@@ -4,7 +4,7 @@ pipeline {
     environment {
         SCANNER_HOME = tool 'sonar-scanner'
         IMAGE_NAME = 'dealdrop'
-        ECR_REPO = '313712213829.dkr.ecr.ap-south-1.amazonaws.com/dealdrop-app'
+        ECR_REPO = '313712213829.dkr.ecr.ap-south-1.amazonaws.com/dd-application'
         AWS_REGION = 'ap-south-1'
 
     }
@@ -17,7 +17,7 @@ pipeline {
 
         stage('SONAR ANALYSIS') {
             steps {
-                sh '$SCANNER_HOME/bin/sonar-scanner -Dsonar.host.url=http://13.235.33.76:9000 -Dsonar.login=squ_0aea2e00aa226e8411bd764d12e1c6db18facb52 -Dsonar.projectKey=dealdrop-application -Dsonar.projectName=dealdrop-application -Dsonar.sources=.'
+                sh '$SCANNER_HOME/bin/sonar-scanner -Dsonar.host.url=http://43.204.29.108:9000 -Dsonar.login=squ_da18f099b235fcb9c42fb1f1a92eebd2334c8924 -Dsonar.projectKey=dealdrop-application -Dsonar.projectName=dealdrop-application -Dsonar.sources=.'
             }
         }
 
