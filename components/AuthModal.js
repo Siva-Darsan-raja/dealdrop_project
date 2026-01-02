@@ -24,7 +24,6 @@ export default function AuthModal({ isOpen, onClose }) {
     });
   };
 
-
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
