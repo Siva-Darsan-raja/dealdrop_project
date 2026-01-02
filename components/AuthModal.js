@@ -19,7 +19,7 @@ export default function AuthModal({ isOpen, onClose }) {
     await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${http://a58b5f56bd8a64c4f868ffdd1196bf62-1464225109.ap-south-1.elb.amazonaws.com:80}/auth/callback`,
+        redirectTo: `${origin}/auth/callback`,
       },
     });
   };
