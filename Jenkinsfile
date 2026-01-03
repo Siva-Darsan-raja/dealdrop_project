@@ -17,7 +17,7 @@ pipeline {
 
         stage('SONAR ANALYSIS') {
             steps {
-                sh '$SCANNER_HOME/bin/sonar-scanner -Dsonar.host.url=http://43.204.29.108:9000 -Dsonar.login=squ_da18f099b235fcb9c42fb1f1a92eebd2334c8924 -Dsonar.projectKey=dealdrop-application -Dsonar.projectName=dealdrop-application -Dsonar.sources=.'
+                sh '$SCANNER_HOME/bin/sonar-scanner -Dsonar.host.url=http://43.205.119.69:9000 -Dsonar.login=squ_70685166f3b906783ab41eabbb83fab16978be32 -Dsonar.projectKey=dealdrop-application -Dsonar.projectName=dealdrop-application -Dsonar.sources=.'
             }
         }
 
