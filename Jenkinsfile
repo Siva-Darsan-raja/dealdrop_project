@@ -4,7 +4,7 @@ pipeline {
     environment {
         SCANNER_HOME = tool 'sonar-scanner'
         IMAGE_NAME = 'dealdrop'
-        ECR_REPO = '313712213829.dkr.ecr.ap-south-1.amazonaws.com/dd-application'
+        ECR_REPO = '313712213829.dkr.ecr.ap-south-1.amazonaws.com/dd-app'
         AWS_REGION = 'ap-south-1'
 
     }
